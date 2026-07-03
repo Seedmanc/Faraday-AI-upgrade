@@ -50147,7 +50147,7 @@ var $$ = (e, t) => e === hg && t === "cublas-12.1.0", zR = e => e === "gemma2", 
     let G = i ? MZ : e.ctxSize,
         D = _$({appCtxSize: e.ctxSize, isLayerCheck: i, metadata: g, isLlama3: n.promptFormat === "Llama3" || h});
     ue.info("Rope params:", {...D, finetuneContextLength: A, ctxSize: G});
-    let k = [["--host", yZ], ["--port", l.toString()], ["--model", a], ["--ctx-size", G.toString()], ["--rope-freq-base", D.ropeFreqBase.toString()], ["--rope-freq-scale", D.ropeFreqScale.toString()], ["--batch-size", "512"], ["--log-disable"]].flat();
+    let k = [["--host", yZ], ["--port", l.toString()], ["--model", a], ["--ctx-size", G.toString()], ["--rope-freq-base", D.ropeFreqBase.toString()], ["--rope-freq-scale", D.ropeFreqScale.toString()], ["--batch-size", "512"] ].flat();
     xC(e.gpuSupport) !== "vulkan" && (s === hg || s === j0 && !zR(c)) && k.push("--flash-attn"), o && k.push("--cache-type-k", o.k, "--cache-type-v", o.v);
     let Le = e.numThreads;
     return $B && t ? k.push("--threads", "1") : Le ? k.push("--threads", Le.toString()) : qB && k.push("--threads", "4"), e.mLockEnabled === !0 && k.push("--mlock"), r ? k.push("--n-gpu-layers", r.toString()) : k.push("--n-gpu-layers", "0"), i && k.push("--layer-check"), {flags: k}
@@ -50349,7 +50349,7 @@ var h2e = async () => {
 var kee = async (e, t, r, a) => {
     ue.info("Starting llama server...");
     let i = "", n = "", s = await new Promise(A => {
-        e.stdout.setEncoding("utf-8"), e.stderr.setEncoding("utf-8"), e.on("exit", (g, C) => OU(n) ? (ue.info(DA.outOfMemoryError), A(new Error(DA.outOfMemoryError))) : g_(n) ? (ue.info(DA.badNvidiaDriverError), A(new Error(DA.badNvidiaDriverError))) : c_(g) ? (ue.info(DA.missingDLLsError), A(new Error(DA.missingDLLsError))) : n.includes("No such file or directory") ? (ue.info(DA.noSuchFileError), A(new Error(DA.noSuchFileError))) : B_(n) ? (ue.info(DA.mlockError), A(new Error(DA.mlockError))) : C_(n) ? (ue.info(DA.unsupportedInstructionSet), A(new Error(DA.unsupportedInstructionSet))) : n.includes("failed to load model") ? (ue.info(DA.malformedModelError), A(new Error(DA.malformedModelError))) : m_(g) ? (ue.info(DA.unsupportedFormatError), A(new Error(DA.unsupportedFormatError))) : A(a ? null : new Error(`${DA.unexpectedCrashError}, exitCode: ${g}, signal: ${C}`))), e.stdout.on("data", g => {
+        e.stdout.setEncoding("utf-8"), e.stderr.setEncoding("utf-8"), e.on("exit", (g, C) => OU(n) ? (ue.info(DA.outOfMemoryError), A(new Error(DA.outOfMemoryError))) : g_(n) ? (ue.info(DA.badNvidiaDriverError), A(new Error(DA.badNvidiaDriverError))) : c_(g) ? (ue.info(DA.missingDLLsError), A(new Error(DA.missingDLLsError))) : n.includes("No such file or directory") ? (ue.info(DA.noSuchFileError), A(new Error(DA.noSuchFileError))) : B_(n) ? (ue.info(DA.mlockError), A(new Error(DA.mlockError))) : C_(n) ? (ue.info(DA.unsupportedInstructionSet), A(new Error(DA.unsupportedInstructionSet))) : n.includes("failed to load model") ? (ue.info(DA.malformedModelError), A(new Error(DA.malformedModelError))) : m_(g) ? (ue.info(DA.unsupportedFormatError), A(new Error(DA.unsupportedFormatError))) : A(a ? null : new Error(`${DA.unexpectedCrashError}, exitCode: ${g}, signal: ${C}`))), e.stderr.on("data", g => {
             if (i += g, OU(n)) return A(new Error(DA.outOfMemoryError));
             if (!a) switch (t) {
                 case iC:
