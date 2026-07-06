@@ -50147,14 +50147,15 @@ var $$ = (e, t) => e === hg && t === "cublas-12.1.0", zR = e => e === "gemma2", 
     let G = i ? MZ : e.ctxSize,
         D = _$({appCtxSize: e.ctxSize, isLayerCheck: i, metadata: g, isLlama3: n.promptFormat === "Llama3" || h});
     ue.info("Rope params:", {...D, finetuneContextLength: A, ctxSize: G});
-    let k = [["--host", yZ], ["--port", l.toString()], ["--model", a], ["--ctx-size", G.toString()], ["--rope-freq-base", D.ropeFreqBase.toString()], ["--rope-freq-scale", D.ropeFreqScale.toString()], ["--batch-size", "512"] ].flat();
+    let k = [["--host", yZ], ["--port", l.toString()], ["--model", a], ["--ctx-size", G.toString()]].flat();
     if (xC(e.gpuSupport) !== "vulkan" && (s === hg || s === j0 && !zR(c))) {
         k.push("--flash-attn");
         k.push("on");
     }
+    k.push('-lv');k.push(4);
     o && k.push("--cache-type-k", o.k, "--cache-type-v", o.v);
     let Le = e.numThreads;
-    return $B && t ? k.push("--threads", "1") : Le ? k.push("--threads", Le.toString()) : qB && k.push("--threads", "4"), e.mLockEnabled === !0 && k.push("--mlock"), r ? k.push("--n-gpu-layers", r.toString()) : k.push("--n-gpu-layers", "0"), i && k.push("--layer-check"), {flags: k}
+    return  e.mLockEnabled === !0 && k.push("--mlock"),   {flags: k}
 }, eee = async e => {
     let t = SC(e.config.appSettings.binVersion),
         r = await k3e({...e, modelPathOnDisk: e.modelPathOnDisk, llamaVersion: t});
