@@ -50155,7 +50155,7 @@ var $$ = (e, t) => e === hg && t === "cublas-12.1.0", zR = e => e === "gemma2", 
     k.push('-lv');k.push(4);
     o && k.push("--cache-type-k", o.k, "--cache-type-v", o.v);
     let Le = e.numThreads;
-    return  e.mLockEnabled === !0 && k.push("--mlock"),   {flags: k}
+    return  e.mLockEnabled === !0 && k.push("--mlock"), i && k.push("--layer-check"),   {flags: k}
 }, eee = async e => {
     let t = SC(e.config.appSettings.binVersion),
         r = await k3e({...e, modelPathOnDisk: e.modelPathOnDisk, llamaVersion: t});
@@ -50361,7 +50361,7 @@ var kee = async (e, t, r, a) => {
                     if (i.includes("model loaded")) return A(null);
                     break;
                 case j0:
-                    if (i.includes("HTTP server listening")) return A(null);
+                    if (i.includes("listening")) return A(null);
                     break;
                 case hg:
                     if (i.includes("all slots are idle")) return A(null);
