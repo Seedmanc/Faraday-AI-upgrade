@@ -50493,7 +50493,7 @@ var yte = require("child_process");
 var O2e = e => {
     let t = jZ(null);
     return new Promise(r => {
-        (0, yte.execFile)(e, ["--info"], {env: t}, (a, i, n) => r(n || null))
+        (0, yte.execFile)(e, ["--list-devices"], {env: t}, (a, i, n) => r(i || null))
     })
 }, rX = new Map, DC = async (e, t) => {
     let r = iC, a = await OZ({gpuLayers: 1, gpuSupport: e, version: r});
@@ -50508,20 +50508,33 @@ var O2e = e => {
     let n = await O2e(a);
     return ue.info(`Finished gpu detection for ${e} after ${Date.now() - i} ms`), t && n && (rX.get(e).set(r, n), ue.info(`Set cached value for gpu detection for ${e}`)), n
 };
-var vte = "NVIDIA START", Gte = "NVIDIA END", Zte = async e => {
+var Zte = async e => {
     let t = [], r = await DC("cublas-12.1.0", e);
-    if (!r || !Xb({stdErr: r, startString: vte, endString: Gte})) return t;
-    let a = Sb({stdErr: r, startString: vte, endString: Gte, numNumbers: 5, numStrings: 1});
-    for (let i of a) {
-        let n = {
-            name: i.strs[0],
-            mibTotalVRAM: i.numbers[1] / 1048576,
-            index: i.numbers[0],
-            mibFreeVRAM: (i.numbers[3] + i.numbers[4]) / 1048576
-        }, s = t.findIndex(o => o.name === n.name);
-        s !== -1 ? t[s].mibFreeVRAM < n.mibFreeVRAM && (t[s] = n) : t.push(n)
+    if (!r || !r.includes("Available devices:"))
+        return t;
+
+    const re = /^\s*CUDA(\d+):\s*(.+?)\s*\((\d+)\s+MiB,\s*(\d+)\s+MiB free\)$/gm;
+
+    let m;
+    while ((m = re.exec(r)) !== null) {
+        const gpu = {
+            name: m[2],
+            index: Number(m[1]),
+            mibTotalVRAM: Number(m[3]),
+            mibFreeVRAM: Number(m[4])
+        };
+
+        const existing = t.findIndex(x => x.name === gpu.name);
+
+        if (existing !== -1) {
+            if (t[existing].mibFreeVRAM < gpu.mibFreeVRAM)
+                t[existing] = gpu;
+        } else {
+            t.push(gpu);
+        }
     }
-    return t.sort((i, n) => i.index - n.index), t
+
+    return t.sort((a, b) => a.index - b.index);
 };
 var HH = require("child_process");
 var Xte = e => (t, r, a) => {
@@ -50599,7 +50612,7 @@ var Vte = "OPENCL START", Ute = "OPENCL END", Tte = async e => {
             openCLPlatformNumber: i.numbers[0]
         }, d = t.findIndex(u => u.name === l.name);
         d !== -1 ? t[d].mibFreeVRAM < l.mibFreeVRAM && (t[d] = l) : t.push(l)
-    }
+        }
     return t.sort((i, n) => {
         let s = i.openCLPlatformNumber * 16 + i.openCLDeviceNumber,
             o = n.openCLPlatformNumber * 16 + n.openCLDeviceNumber;
@@ -50615,7 +50628,7 @@ var Hte = "VULKAN START", xte = "VULKAN END", Lte = async e => {
         if (n === "nvidia") continue;
         let s = {type: n, name: i.strs[0], mibTotalVRAM: i.numbers[2] / 1024 ** 2, deviceNumber: i.numbers[0]};
         t.find(o => o.name === s.name) || t.push(s)
-    }
+        }
     return t.sort((i, n) => i.deviceNumber - n.deviceNumber), t
 };
 var iX = async ({cache: e, skip: t}) => {
